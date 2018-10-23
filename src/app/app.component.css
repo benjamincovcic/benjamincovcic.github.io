@@ -1,0 +1,17 @@
+.searchField{
+    display: inline;
+    float:left;
+    margin-left:1%;
+    
+}
+.buttonAdd {
+    text-align: center;
+}
+.paginationField{
+    display:inline;
+    float: right;
+    margin-right: 1%;
+}
+.addName, .addAge, .addCity, .addPhone, .addEmail, .addOcupation, .addCompany{
+    margin:5%;
+}

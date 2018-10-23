@@ -1,20 +1,194 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
+<div class="buttonAdd" >
+    <input class="btn btn-success addBtn" (click)="openAddItem()" value="Add +">
+    <div class="searchField">
+    <input  placeholder="Filter" [(ngModel)]="filterQuery" (input)="refresh($event.target.value)">
+    <button class="btn btn-primary" (click)="filter()">    <fa name="fa-search" class="fa fa-search"></fa>
+    </button>
+    </div>
+
+    <div class="paginationField">
+    <fa *ngIf="!counter && !fullData" name="fa-backward" class="fa fa-backward" style="color:gray"></fa>
+    <fa *ngIf="counter && !fullData" name="fa-backward" class="fa fa-backward" (click)="pageDown()"></fa>
+    <label *ngIf="!fullData">{{counter}}</label>
+    <fa *ngIf="!fullData" name="fa-forward" class="fa fa-forward" (click)="pageUp()"></fa>
+    <input *ngIf="!fullData" type="button" class="btn btn-primary" value="Show All" (click)="showAllData()">
+    <input *ngIf="fullData" type="button" class="btn btn-primary" value="Show Less" (click)="showLessData()">
+    </div>
+
+</div>
+
+<table class="table table-striped" [mfData]="data" #mf="mfDataTable">
+    <thead>
+    <tr>
+        <th>
+            <mfDefaultSorter (click)="nameSort()"by="name">Name</mfDefaultSorter>
+            <fa *ngIf="sortName==-1" name="fa-sort" class="fa fa-sort"></fa>
+            <fa *ngIf="sortName==0" name="fa-sort-down" class="fa fa-sort-down"></fa>
+            <fa *ngIf="sortName==1" name="fa-sort-up" class="fa fa-sort-up"></fa>
+
+
+        </th>
+
+        <th>
+            <mfDefaultSorter (click)="ageSort()" by="age">Age</mfDefaultSorter>
+            <fa *ngIf="sortAge==-1" name="fa-sort" class="fa fa-sort"></fa>
+            <fa *ngIf="sortAge==0" name="fa-sort-down" class="fa fa-sort-down"></fa>
+            <fa *ngIf="sortAge==1" name="fa-sort-up" class="fa fa-sort-up"></fa>
+        </th>
+        <th>
+            <mfDefaultSorter (click)="occupationSort()" by="occupation">Occupation</mfDefaultSorter>
+            <fa *ngIf="sortOccupation==-1" name="fa-sort" class="fa fa-sort"></fa>
+            <fa *ngIf="sortOccupation==0" name="fa-sort-down" class="fa fa-sort-down"></fa>
+            <fa *ngIf="sortOccupation==1" name="fa-sort-up" class="fa fa-sort-up"></fa>
+        </th>
+        <th>
+            <mfDefaultSorter (click)="citySort()" by="city">City</mfDefaultSorter>
+            <fa *ngIf="sortCity==-1" name="fa-sort" class="fa fa-sort"></fa>
+            <fa *ngIf="sortCity==0" name="fa-sort-down" class="fa fa-sort-down"></fa>
+            <fa *ngIf="sortCity==1" name="fa-sort-up" class="fa fa-sort-up"></fa>
+        </th>
+        <th>
+            <mfDefaultSorter (click)="phoneSort()" by="phone">Phone</mfDefaultSorter>
+            <fa *ngIf="sortPhone==-1" name="fa-sort" class="fa fa-sort"></fa>
+            <fa *ngIf="sortPhone==0" name="fa-sort-down" class="fa fa-sort-down"></fa>
+            <fa *ngIf="sortPhone==1" name="fa-sort-up" class="fa fa-sort-up"></fa>
+        </th>
+        <th>
+            <mfDefaultSorter (click)="emailSort()" by="email">E-mail</mfDefaultSorter>
+            <fa *ngIf="sortEmail==-1" name="fa-sort" class="fa fa-sort"></fa>
+            <fa *ngIf="sortEmail==0" name="fa-sort-down" class="fa fa-sort-down"></fa>
+            <fa *ngIf="sortEmail==1" name="fa-sort-up" class="fa fa-sort-up"></fa>
+        </th>
+        <th>
+            <mfDefaultSorter (click)="companySort" by="company">Company</mfDefaultSorter>
+            <fa *ngIf="sortCompany==-1" name="fa-sort" class="fa fa-sort"></fa>
+            <fa *ngIf="sortCompany==0" name="fa-sort-down" class="fa fa-sort-down"></fa>
+            <fa *ngIf="sortCompany==1" name="fa-sort-up" class="fa fa-sort-up"></fa>
+        </th>
+        
+        <th>
+            <mfDefaultSorter>Actions</mfDefaultSorter>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of mf.data; let i = index">
+        <td>{{item.name}}</td>
+        <td >{{item.age}}</td>
+        <td>{{item.occupation}}</td>
+        <td>{{item.city}}</td>
+        <td>{{item.phone}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.company}}</td>
+        <td  class="text-center">
+            <fa (click)="deleteRow(i)" name="fa-trash" style="cursor: pointer" class="fa fa-trash"></fa>
+            <fa (click)="openEditItem(i)" name="fa-edit" style="cursor: pointer" class="fa fa-edit"></fa>
+        </td>
+
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="4">
+            <mfBootstrapPaginator [rowsOnPageSet]="[50]"></mfBootstrapPaginator>
+        </td>
+    </tr>
+    </tfoot>
+</table>
+
+<ng-template #addItem>
+        <!--KREIRAJ ARTIKAL-->
+        <div class="modal-header addItem">
+            <h3 class="modal-title styleFormstitle">Add Row</h3>
+        </div>
+        <form [formGroup]="itemForm" (ngSubmit)="submitForm(itemForm.value)">
+            <div class="modal-body createArticle" style="text-align: center;">
+                <div class="addName">
+                    <input placeholder="Name" type="text" [formControl]="itemForm.controls['name']">
+                    <span *ngIf="itemForm.controls['name'].hasError('required')" class="error">Polje je obavezno</span>
+
+                </div>
+                <div class="addAge">
+                        <input placeholder="Age" type="number" [formControl]="itemForm.controls['age']">
+                        <span *ngIf="itemForm.controls['age'].hasError('required')" class="error">Polje je obavezno</span>
+
+                </div>
+                <div class="addOccupation">
+                        <input placeholder="Occupation" type="text" [formControl]="itemForm.controls['occupation']">
+                        <span *ngIf="itemForm.controls['occupation'].hasError('required')" class="error">Polje je obavezno</span>
+                </div>
+                <div class="addCity">
+                        <input placeholder="City" type="text" [formControl]="itemForm.controls['city']">
+                        <span *ngIf="itemForm.controls['city'].hasError('required')" class="error">Polje je obavezno</span>
+                </div>
+                <div class="addPhone">
+                        <input placeholder="Phone" type="text" [formControl]="itemForm.controls['phone']">
+                        <span *ngIf="itemForm.controls['phone'].hasError('required')" class="error">Polje je obavezno</span>
+                </div>
+                <div class="addEmail">
+                        <input placeholder="E-mail" type="text" [formControl]="itemForm.controls['email']">
+                        <span *ngIf="itemForm.controls['email'].hasError('required')" class="error">Polje je obavezno</span>
+
+                </div>
+                <div class="addCompany">
+                        <input placeholder="Company" type="text" [formControl]="itemForm.controls['company']">
+                        <span *ngIf="itemForm.controls['company'].hasError('required')" class="error">Polje je obavezno</span>
+
+                </div>
+            </div>
+            <div class="modal-footer createArticle">
+                    <a class="btn btn-default createArticleButton" data-dismiss="modal" (click)="closeModal()">Zatvori</a>
+                    <input *ngIf="!edit" type="submit" class="btn btn-primary createItem" value="Kreiraj" [disabled]="!itemForm.valid" (click)="closeModal()">
+
+             </div>
+        </form>
+</ng-template>
+
+<ng-template #editItem>
+            <!--KREIRAJ ARTIKAL-->
+            <div class="modal-header editItem">
+                <h3 class="modal-title styleFormstitle">Edit Row</h3>
+            </div>
+            <form [formGroup]="itemForm" (ngSubmit)="submitForm(itemForm.value)">
+                    <div class="modal-body createArticle" style="text-align: center;">
+                        <div class="addName">
+                            <input placeholder="Name" type="text" [formControl]="itemForm.controls['name']">
+                            <span *ngIf="itemForm.controls['name'].hasError('required')" class="error">Polje je obavezno</span>
+        
+                        </div>
+                        <div class="addAge">
+                                <input placeholder="Age" type="number" [formControl]="itemForm.controls['age']">
+                                <span *ngIf="itemForm.controls['age'].hasError('required')" class="error">Polje je obavezno</span>
+        
+                        </div>
+                        <div class="addOccupation">
+                                <input placeholder="Occupation" type="text" [formControl]="itemForm.controls['occupation']">
+                                <span *ngIf="itemForm.controls['occupation'].hasError('required')" class="error">Polje je obavezno</span>
+                        </div>
+                        <div class="addCity">
+                                <input placeholder="City" type="text" [formControl]="itemForm.controls['city']">
+                                <span *ngIf="itemForm.controls['city'].hasError('required')" class="error">Polje je obavezno</span>
+                        </div>
+                        <div class="addPhone">
+                                <input placeholder="Phone" type="text" [formControl]="itemForm.controls['phone']">
+                                <span *ngIf="itemForm.controls['phone'].hasError('required')" class="error">Polje je obavezno</span>
+                        </div>
+                        <div class="addEmail">
+                                <input placeholder="E-mail" type="text" [formControl]="itemForm.controls['email']">
+                                <span *ngIf="itemForm.controls['email'].hasError('required')" class="error">Polje je obavezno</span>
+        
+                        </div>
+                        <div class="addCompany">
+                                <input placeholder="Company" type="text" [formControl]="itemForm.controls['company']">
+                                <span *ngIf="itemForm.controls['company'].hasError('required')" class="error">Polje je obavezno</span>
+        
+                        </div>
+                    </div>
+                    <div class="modal-footer createArticle">
+                            <a class="btn btn-default createArticleButton" data-dismiss="modal" (click)="closeModal()">Zatvori</a>
+                            <input *ngIf="edit" type="submit" class="btn btn-primary createItem" value="Kreiraj" [disabled]="!itemForm.valid" (click)="closeModal()">
+        
+                     </div>
+                </form>
+</ng-template>
